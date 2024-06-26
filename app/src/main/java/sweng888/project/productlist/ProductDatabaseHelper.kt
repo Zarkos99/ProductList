@@ -96,7 +96,7 @@ class ProductDatabaseHelper(private val context: Context) :
         product_price: Double
     ) {
         val database = writableDatabase
-        var values = ContentValues()
+        val values = ContentValues()
 
         values.put(product_id_key, product_id)
         values.put(product_name_key, product_name)

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,7 @@ class EmailConfirmationActivity : Activity() {
         setContentView(binding.root)
 
         val products_recycler_view = findViewById<RecyclerView>(R.id.products_recycler_view)
+
         val selected_products = intent.extras?.getParcelableArrayList<Product>("selected_products")
         if (selected_products == null) {
             Toast.makeText(
@@ -33,7 +36,7 @@ class EmailConfirmationActivity : Activity() {
             return
         }
 
-        val product_list_adaptor = ProductListAdaptor(this, selected_products)
+        val product_list_adaptor = ProductListAdaptor(this, selected_products, true)
         products_recycler_view.adapter = product_list_adaptor
         val layout_manager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         products_recycler_view.layoutManager = layout_manager
@@ -52,15 +55,15 @@ class EmailConfirmationActivity : Activity() {
         val email_intent = Intent(Intent.ACTION_SEND)
         /*To send an email you need to specify mailto: as URI using setData() method
         and data type will be to text/plain using setType() method*/
-        email_intent.setDataAndType(Uri.parse("mailto:"), "text/plain")
+        email_intent.setType("*/*")
         // put recipient email in intent
         /* recipient is put as array because you may wanna send email to multiple emails
            so enter comma(,) separated emails, it will be stored in array*/
-        email_intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("kzarvis15@gmail.com"))
+        email_intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("sweng888mobileapps@gmail.com "))
         //put the Subject in the intent
         email_intent.putExtra(Intent.EXTRA_SUBJECT, "SWENG-888 Practice 3 Products")
         //put the message in the intent
-        var json_products: String = ""
+        var json_products = ""
         for (product in products) {
             json_products += gson_pretty.toJson(product) + "\n"
         }
@@ -68,7 +71,7 @@ class EmailConfirmationActivity : Activity() {
 
         try {
             //start email intent
-            startActivity(Intent.createChooser(email_intent, "Choose Email Client..."))
+            startActivity(email_intent)
             Toast.makeText(this, "Email sent", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             //if any thing goes wrong for example no email client application or any exception

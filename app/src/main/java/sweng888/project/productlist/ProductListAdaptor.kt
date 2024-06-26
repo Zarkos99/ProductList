@@ -13,7 +13,8 @@ import kotlinx.coroutines.selects.select
 
 class ProductListAdaptor(
     private val context: Context,
-    private val products: List<Product>
+    private val products: List<Product>,
+    private val hide_checkbox: Boolean = false
 ) :
     RecyclerView.Adapter<ProductListAdaptor.ViewHolder>() {
 
@@ -24,7 +25,7 @@ class ProductListAdaptor(
         // create new view with UI of weather item
         val view = LayoutInflater.from(context)
             .inflate(R.layout.product_item, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(view, hide_checkbox)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -66,7 +67,8 @@ class ProductListAdaptor(
         )
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    class ViewHolder(view: View, hide_checkbox: Boolean) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
         val product_name_text_view: TextView = view.findViewById(R.id.textview_product_name)
         val product_price_text_view: TextView = view.findViewById(R.id.textview_price)
         val product_seller_text_view: TextView = view.findViewById(R.id.textview_seller)
@@ -77,6 +79,9 @@ class ProductListAdaptor(
 
         init {
             product_checkbox.setOnClickListener(this)
+            if (hide_checkbox) {
+                product_checkbox.visibility = View.INVISIBLE
+            }
         }
 
         fun setItemClickListener(ic: ItemClickListener) {
