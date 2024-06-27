@@ -3,6 +3,9 @@ package sweng888.project.productlist
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+/**
+ * Data class for a single product item
+ */
 @Parcelize
 data class Product(
     val id: String = "",

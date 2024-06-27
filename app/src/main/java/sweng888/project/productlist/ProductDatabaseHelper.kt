@@ -5,12 +5,17 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-
+/**
+ * Database helper for products
+ */
 class ProductDatabaseHelper(private val context: Context) :
     SQLiteOpenHelper(
         context, context.getString(R.string.database_name), null, 1
     ) {
 
+    /**
+     * Handles creation of database rows and columns
+     */
     override fun onCreate(db: SQLiteDatabase) {
         val query =
             ("CREATE TABLE " + table_name + " (" +
@@ -24,6 +29,9 @@ class ProductDatabaseHelper(private val context: Context) :
         db.execSQL(query)
     }
 
+    /**
+     * Handles expected behavior for upgrades to new revisions of database
+     */
     override fun onUpgrade(
         db: SQLiteDatabase,
         oldVersion: Int,
@@ -34,6 +42,9 @@ class ProductDatabaseHelper(private val context: Context) :
         onCreate(db)
     }
 
+    /**
+     * Gets all products within the database
+     */
     fun getAllProducts(): ArrayList<Product> {
         val db = readableDatabase
         val products_cursor = db.rawQuery("SELECT * FROM $table_name", null)
@@ -89,6 +100,9 @@ class ProductDatabaseHelper(private val context: Context) :
         return product_array_list
     }
 
+    /**
+     * Adds a single product to the database
+     */
     fun populateProductDatabase(
         product_id: String,
         product_name: String,

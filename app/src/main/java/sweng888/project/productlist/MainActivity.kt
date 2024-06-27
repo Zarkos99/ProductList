@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import sweng888.project.productlist.databinding.ActivityMainBinding
 
+/**
+ * Main activity and starting point for application
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -22,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val products_recycler_view = findViewById<RecyclerView>(R.id.products_recycler_view)
         val product_database_helper = ProductDatabaseHelper(this)
 
+        // Deletes any possible instances of the "ProductsDatabase" and creates a new one
         this.deleteDatabase(this.getString(R.string.database_name))
         var products = product_database_helper.getAllProducts()
         if (products.isEmpty()) {
@@ -29,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             products = product_database_helper.getAllProducts()
         }
 
+        // Set up product list adaptor for recyclerview with selectable items
         val product_list_adaptor = ProductListAdaptor(this, products)
         products_recycler_view.adapter = product_list_adaptor
         val layout_manager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -38,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         binding.confirmSelectionButton.setOnClickListener { view ->
             val selected_products = product_list_adaptor.getSelectedProducts()
             if (selected_products.size < 3) {
+                // Display a snackbar to inform the operator how many more products must be selected
                 Snackbar.make(
                     view,
                     "Must select " + (3 - selected_products.size) + " more " + (if ((3 - selected_products.size) == 1) "product" else "products"),
@@ -50,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // If ample number of products are selected then pass products to EmailConfirmationActivity to confirm and send email
             val intent = Intent(this@MainActivity, EmailConfirmationActivity::class.java)
             intent.putParcelableArrayListExtra(
                 "selected_products",

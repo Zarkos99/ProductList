@@ -26,6 +26,7 @@ class EmailConfirmationActivity : Activity() {
 
         val products_recycler_view = findViewById<RecyclerView>(R.id.products_recycler_view)
 
+        // Obtain selected products communicated from previous activity
         val selected_products = intent.extras?.getParcelableArrayList<Product>("selected_products")
         if (selected_products == null) {
             Toast.makeText(
@@ -36,6 +37,7 @@ class EmailConfirmationActivity : Activity() {
             return
         }
 
+        // Set up product list adaptor for recyclerview without selectable items
         val product_list_adaptor = ProductListAdaptor(this, selected_products, true)
         products_recycler_view.adapter = product_list_adaptor
         val layout_manager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
